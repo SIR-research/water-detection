@@ -1,0 +1,70 @@
+# packages in environment at /home/u33427/.conda/envs/water:
+#
+# Name                    Version                   Build  Channel
+absl-py                   0.9.0                    py36_0  
+astor                     0.8.0                    py36_0  
+backcall                  0.1.0                    py36_2    intel
+backports                 1.0                      py36_9    intel
+bzip2                     1.0.8                h14c3975_2    file:///glob/development-tools/versions/oneapi/beta08/inteloneapi/conda_channel
+c-ares                    1.15.0            h7b6447c_1001    file:///glob/development-tools/versions/oneapi/beta08/inteloneapi/conda_channel
+certifi                   2018.1.18                py36_2    intel
+decorator                 4.3.0                    py36_3    intel
+gast                      0.3.2                      py_0    file:///glob/development-tools/versions/oneapi/beta08/inteloneapi/conda_channel
+get_terminal_size         1.0.0                    py36_7    intel
+google-pasta              0.1.8                      py_0    file:///glob/development-tools/versions/oneapi/beta08/inteloneapi/conda_channel
+grpcio                    1.14.1           py36h9ba97e2_0  
+h5py                      2.8.0            py36h989c5e5_3  
+hdf5                      1.10.2                        2    file:///glob/development-tools/versions/oneapi/beta08/inteloneapi/conda_channel
+icc_rt                    2021.1b8              intel_863    file:///glob/development-tools/versions/oneapi/beta08/inteloneapi/conda_channel
+intel-openmp              2021.1b8              intel_863    file:///glob/development-tools/versions/oneapi/beta08/inteloneapi/conda_channel
+intelpython               2021.1b8                      0    file:///glob/development-tools/versions/oneapi/beta08/inteloneapi/conda_channel
+ipython                   6.3.1                    py36_3    intel
+ipython_genutils          0.2.0                    py36_2    intel
+jedi                      0.12.0                   py36_2    intel
+keras                     2.2.5                    pypi_0    pypi
+keras-applications        1.0.8                      py_0    file:///glob/development-tools/versions/oneapi/beta08/inteloneapi/conda_channel
+keras-preprocessing       1.1.0                      py_1    file:///glob/development-tools/versions/oneapi/beta08/inteloneapi/conda_channel
+libgcc-ng                 9.1.0                hdf63c60_0    file:///glob/development-tools/versions/oneapi/beta08/inteloneapi/conda_channel
+libprotobuf               3.11.2               hd408876_0    file:///glob/development-tools/versions/oneapi/beta08/inteloneapi/conda_channel
+libstdcxx-ng              9.1.0                hdf63c60_0    file:///glob/development-tools/versions/oneapi/beta08/inteloneapi/conda_channel
+markdown                  3.1.1                    py36_0  
+mkl                       2021.1b8              intel_486    file:///glob/development-tools/versions/oneapi/beta08/inteloneapi/conda_channel
+mkl-service               2.1.0                    py36_2    intel
+mkl_fft                   1.0.14           py36ha68da19_1    intel
+mkl_random                1.0.4            py36ha68da19_2    intel
+numpy                     1.17.0          py36ha68da19_13    intel
+numpy-base                1.17.0                  py36_13    intel
+openssl                   1.0.2s                        0    intel
+parso                     0.2.0                    py36_2    intel
+path.py                   11.0.1                   py36_2    intel
+pexpect                   4.2.1                    py36_4    intel
+pickleshare               0.7.4                    py36_3    intel
+pip                       19.1.1                   py36_0    intel
+prompt_toolkit            1.0.15                   py36_2    intel
+protobuf                  3.11.2           py36he6710b0_0  
+ptyprocess                0.5.2                    py36_2    intel
+pygments                  2.2.0                    py36_5    intel
+python                    3.6.9                         5    intel
+pyyaml                    5.3.1                    pypi_0    pypi
+scipy                     1.3.1            py36ha68da19_2    intel
+setuptools                41.0.1                   py36_0    intel
+simplegeneric             0.8.1                    py36_7    intel
+six                       1.12.0                   py36_0    intel
+sqlite                    3.28.0                        0    intel
+tbb                       2021.1b8              intel_560    file:///glob/development-tools/versions/oneapi/beta08/inteloneapi/conda_channel
+tbb4py                    2021.1b8         py36_intel_560    file:///glob/development-tools/versions/oneapi/beta08/inteloneapi/conda_channel
+tcl                       8.6.4                        24    intel
+tensorboard               1.15.0             pyhb230dea_0  
+tensorflow                1.15.2                   py36_0    intel
+tensorflow-base           1.15.2                        0    intel
+tensorflow-estimator      1.15.1             pyh2649769_0  
+termcolor                 1.1.0                    py36_1  
+tk                        8.6.4                        29    intel
+traitlets                 4.3.2                    py36_3    intel
+wcwidth                   0.1.7                    py36_6    intel
+webencodings              0.5.1                    py36_0    intel
+werkzeug                  0.16.0                     py_0    file:///glob/development-tools/versions/oneapi/beta08/inteloneapi/conda_channel
+wheel                     0.31.0                   py36_3    intel
+wrapt                     1.12.1           py36h7b6447c_1  
+xz                        5.2.5                h14c3975_0    file:///glob/development-tools/versions/oneapi/beta08/inteloneapi/conda_channel
+zlib                      1.2.11.1             h14c3975_1    file:///glob/development-tools/versions/oneapi/beta08/inteloneapi/conda_channel
