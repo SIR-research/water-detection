@@ -10,9 +10,9 @@ and implimented by Matterport in Tensorflow and Keras.
 import os
 import sys
 import tensorflow as tf
-import matplotlib
-import matplotlib.pyplot as plt
-import matplotlib.patches as patches
+#import matplotlib
+#import matplotlib.pyplot as plt
+#import matplotlib.patches as patches
 import cv2
 
 ROOT_DIR = os.getcwd()
