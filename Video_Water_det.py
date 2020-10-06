@@ -14,6 +14,7 @@ import tensorflow as tf
 #import matplotlib.pyplot as plt
 #import matplotlib.patches as patches
 import cv2
+import json
 
 ROOT_DIR = os.getcwd()
 
@@ -156,6 +157,8 @@ if __name__ == '__main__':
     class_names = ['BG', 'Water']
 
     capture = cv2.VideoCapture(os.path.join(VIDEO_DIR, video_name))
+    print(os.path.join(VIDEO_DIR, video_name))
+
     try:
         if not os.path.exists(VIDEO_SAVE_DIR):
             os.makedirs(VIDEO_SAVE_DIR)
@@ -185,13 +188,18 @@ if __name__ == '__main__':
               for i, item in enumerate(zip(frames, results)):
                   frame = item[0]
                   r = item[1]
-                  frame = display_instances(
-                    frame, r['rois'], r['masks'], r['class_ids'], class_names, r['scores']
-                )
+
+                  frame = display_instances(frame, r['rois'], r['masks'], r['class_ids'], class_names, r['scores'])
+
                   name = '{0:04d}_{1}_{2}.jpg'.format(frame_count + i - batch_size,epoch,video_name.replace(".mp4",""))
                   name = os.path.join(VIDEO_SAVE_DIR, name)
                   cv2.imwrite(name, frame)
                   print('writing to file:{0}'.format(name))
+                    
+#                  with open(name+'.json', 'w') as f:
+#                      json.dump(r, f)
+                  print(r)
+
             # Clear the frames array to start the next batch
                   frames = []
 
