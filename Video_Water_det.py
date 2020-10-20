@@ -14,7 +14,7 @@ import tensorflow as tf
 #import matplotlib.pyplot as plt
 #import matplotlib.patches as patches
 import cv2
-import json
+import json_tricks as jsontrk
 
 ROOT_DIR = os.getcwd()
 
@@ -196,10 +196,16 @@ if __name__ == '__main__':
                   cv2.imwrite(name, frame)
                   print('writing to file:{0}'.format(name))
                     
-#                  with open(name+'.json', 'w') as f:
-#                      json.dump(r, f)
-                  print(r)
+                  filename, _ = os.path.splitext(name)
 
+                  ## save to numpy file
+                  np.save(filename, r)
+                  
+                  ## save to json with json_tricks
+                  with open(filename + '.json', 'w') as f:
+                      f.write("#generated with json_tricks python package to encode numpy arrays.\n")
+                      jsontrk.dump(r, f) 
+                  
             # Clear the frames array to start the next batch
                   frames = []
 
