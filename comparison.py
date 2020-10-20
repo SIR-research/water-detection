@@ -421,19 +421,60 @@ import json
 
 def create_comparison_entity_json(gtmd, vermd):
     
+ 
+    # not structured data
+    # comparison_ngsi = {
+        
+    #     "id": "comparison_1",
+    #     "type": "irrigation_comparison",
+        
+    #     "gt_mean": {
+    #         "value": 23,
+    #         "type": "Float"
+    #     },
+    #     "gt_std_deviation": {
+    #         "value": 720,
+    #         "type": "Float"
+    #     },
+    #     "verification_mean": {
+    #         "value": 23,
+    #         "type": "Float"
+    #     },
+    #     "verification_std_deviation": {
+    #         "value": 720,
+    #         "type": "Float"
+    #     },
+                
+    #     "irr_bar_img": {
+    #         "value": "url...",
+    #         "type": "url"
+    #     },
+    #     "irr_comparison_img": {
+    #         "value": "url...",
+    #         "type": "url"
+    #     }
+    # }
+    
+    
     
     comparison_ngsi = {
         
         "id": "comparison_1",
         "type": "irrigation_comparison",
-        "mean": {
-            "value": 23,
-            "type": "Float"
+        "ground_truth": {
+            "type": "StruturedValue",
+            "value": { 
+                "mean": 333,
+                "std": 333
+                }
         },
-        "std_deviation": {
-            "value": 720,
-            "type": "Float"
-        },
+        "verification": {
+            "type": "StruturedValue",
+            "value": {
+                "mean": 333,
+                "std": 333
+                }
+        }
         "irr_bar_img": {
             "value": "url...",
             "type": "url"
@@ -443,6 +484,16 @@ def create_comparison_entity_json(gtmd, vermd):
             "type": "url"
         }
     }
+        
+    
+    
+    
+    
+    return comparison_nsgi
+
+def save_comparison_json(gtmd, vermd):
+    
+    nsgi_json = create_comparison_entity_json(gtmd, vermd)
     
     with open('comparison_ngsi.json', 'r') as fp:
         json.dump(comparison_ngsi, fp)
