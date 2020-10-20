@@ -177,8 +177,9 @@ if __name__ == '__main__':
             break
         
         # Save each frame of the video to a list
+        skip_n_frames = 1
         frame_count += 1
-        if frame_count % 1 == 0:
+        if frame_count % skip_n_frames == 0:
           
           frames.append(frame)
           print('frame_count :{0}'.format(frame_count))

@@ -3,7 +3,9 @@
 import os
 import numpy as np 
 import matplotlib.pyplot as plt
+import cv2
 
+#%%
 
 def get_metadata(path):
     '''
@@ -68,17 +70,8 @@ def get_metadata(path):
                 }
 
     return metadata
-#%%
-# def draw_irrigation_map(md):
-#     irrmap=md['irrmap']
-            
-         
-#     plt.imshow(irrmap, cmap='Blues')
-#     plt.show()
-        
 
 #%%
-import cv2
 
 def debug_rescale(img, scale=0.5):
 
@@ -196,34 +189,9 @@ def debug_get_metadata_rescale(path, scale=0.5):
     return metadata
     
 
-#%%
-# calculates the irrigation map, mean and std deviation.        
-
-
-gt_metadata = get_metadata(path = '/home/sergio/water-detection/videos/base_flip/irr_ok_srt.mp4')
-
-# draw_irrigation_map(gt_metadata)
-
-
-
-# ver_metadata = get_metadata(path = '/home/sergio/water-detection/videos/base_flip/irr_ok_srt.mp4')
-ver_metadata = debug_get_metadata_rescale(path = '/home/sergio/water-detection/videos/base_flip/irr_ok_srt.mp4',
-                                          scale=0.5)
-
-
-# draw_irrigation_map(ver_metadata)
 
     
 #%%
-def apply_mask(image, mask, color, alpha=0.5):
-    """apply mask to image"""
-    for n, c in enumerate(color):
-        image[:, :, n] = np.where(
-            mask != 0,
-            image[:, :, n] * (1 - alpha*mask) + alpha*mask * c,
-            image[:, :, n]
-        )
-    return image
 
 def draw_bars_comparison(gtmd, vermd, second_color):
 
@@ -238,7 +206,19 @@ def draw_bars_comparison(gtmd, vermd, second_color):
     
     plt.bar(y_pos, height, yerr=error, color=color, align='center', alpha=0.5, ecolor='black', capsize=10)
     plt.xticks(y_pos, bars)
+    plt.savefig('bars_plot_comparison.png', format='png')
     plt.show()
+
+
+def apply_mask(image, mask, color, alpha=0.5):
+    """apply mask to image"""
+    for n, c in enumerate(color):
+        image[:, :, n] = np.where(
+            mask != 0,
+            image[:, :, n] * (1 - alpha*mask) + alpha*mask * c,
+            image[:, :, n]
+        )
+    return image
 
 
 
@@ -326,11 +306,12 @@ def draw_comparison(gtmd, vermd):
     # imgplot = plt.imshow(gtimg, cmap='Blues', alpha=1, origin='lower')
     # imgplot = plt.imshow(verimg, cmap='Reds', alpha=0.5, origin='lower')
     plt.imshow(image)
+
+
     plt.show()
 
     return imgmsk
 
-msk = draw_comparison(gt_metadata, ver_metadata)
 
 
 #%%
@@ -428,14 +409,62 @@ def draw_comparison_side_by_side(gtmd, vermd):
     ax2.imshow(imagever)
     ax3.imshow(image)
     
+    plt.savefig('irrigation_comparison.png', format='png')
 
     plt.show()
 
+
+
+
+#%%
+import json
+
+def create_comparison_entity_json(gtmd, vermd):
     
+    
+    comparison_ngsi = {
+        
+        "id": "comparison_1",
+        "type": "irrigation_comparison",
+        "mean": {
+            "value": 23,
+            "type": "Float"
+        },
+        "std_deviation": {
+            "value": 720,
+            "type": "Float"
+        },
+        "irr_bar_img": {
+            "value": "url...",
+            "type": "url"
+        },
+        "irr_comparison_img": {
+            "value": "url...",
+            "type": "url"
+        }
+    }
+    
+    with open('comparison_ngsi.json', 'r') as fp:
+        json.dump(comparison_ngsi, fp)
+
+
+
+#%%
+# calculates the irrigation map, mean and std deviation.        
+
+
+gt_metadata = get_metadata(path = '/home/sergio/water-detection/videos/base_flip/irr_ok_srt.mp4')
+
+
+
+
+# ver_metadata = get_metadata(path = '/home/sergio/water-detection/videos/base_flip/irr_ok_srt.mp4')
+ver_metadata = debug_get_metadata_rescale(path = '/home/sergio/water-detection/videos/base_flip/irr_ok_srt.mp4',
+                                          scale=0.5)
+
+msk = draw_comparison(gt_metadata, ver_metadata)
 
 draw_comparison_side_by_side(gt_metadata, ver_metadata)
-
-
 
 
 #%%
