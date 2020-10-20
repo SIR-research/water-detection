@@ -25,8 +25,8 @@ def get_metadata(path):
     for filename in os.listdir(path):
         if filename.endswith(".npy"):
             
-            if np.random.rand()>0.1:    #temp: remove half of frames
-                continue
+            # if np.random.rand()>0.5:    #temp: remove half of frames
+            #     continue
             
             print(filename)
                 
@@ -135,8 +135,8 @@ def debug_get_metadata_rescale(path, scale=0.5):
     for filename in os.listdir(path):
         if filename.endswith(".npy"):
             
-            if np.random.rand()>0.1:    #temp: remove half of frames
-                continue
+            # if np.random.rand()>0.1:    #temp: remove half of frames
+            #     continue
             
             print(filename)
                 
@@ -207,7 +207,7 @@ def draw_bars_comparison(gtmd, vermd, second_color):
     plt.bar(y_pos, height, yerr=error, color=color, align='center', alpha=0.5, ecolor='black', capsize=10)
     plt.xticks(y_pos, bars)
     plt.savefig('bars_plot_comparison.png', format='png')
-    plt.show()
+    # plt.show()
 
 
 def apply_mask(image, mask, color, alpha=0.5):
@@ -308,7 +308,7 @@ def draw_comparison(gtmd, vermd):
     plt.imshow(image)
 
 
-    plt.show()
+    # plt.show()
 
     return imgmsk
 
@@ -317,7 +317,7 @@ def draw_comparison(gtmd, vermd):
 #%%
 
 
-def draw_comparison_side_by_side(gtmd, vermd):
+def plot_comparison(gtmd, vermd):
 
     
     # normalize vector
@@ -411,7 +411,7 @@ def draw_comparison_side_by_side(gtmd, vermd):
     
     plt.savefig('irrigation_comparison.png', format='png')
 
-    plt.show()
+    # plt.show()
 
 
 
@@ -464,7 +464,7 @@ def create_comparison_entity_json(gtmd, vermd):
         "ground_truth": {
             "type": "StruturedValue",
             "value": { 
-                "mean": 333,
+                "mean": gtmd['mean'],
                 "std": 333
                 }
         },
@@ -474,7 +474,7 @@ def create_comparison_entity_json(gtmd, vermd):
                 "mean": 333,
                 "std": 333
                 }
-        }
+        },
         "irr_bar_img": {
             "value": "url...",
             "type": "url"
@@ -485,65 +485,87 @@ def create_comparison_entity_json(gtmd, vermd):
         }
     }
         
-    
-    
-    
-    
-    return comparison_nsgi
+    return comparison_ngsi
 
 def save_comparison_json(gtmd, vermd):
     
-    nsgi_json = create_comparison_entity_json(gtmd, vermd)
+    comparison_ngsi = create_comparison_entity_json(gtmd, vermd)
+        
+    with open('comparison_ngsi.json', 'w') as fp:
+        json.dump(comparison_ngsi, fp, indent=4)
+
+
+
+# #%%
+# # calculates the irrigation map, mean and std deviation.        
+
+
+# gt_metadata = get_metadata(path = '/home/sergio/water-detection/videos/base_flip/irr_ok_srt.mp4')
+
+
+
+
+# # ver_metadata = get_metadata(path = '/home/sergio/water-detection/videos/base_flip/irr_ok_srt.mp4')
+# ver_metadata = debug_get_metadata_rescale(path = '/home/sergio/water-detection/videos/base_flip/irr_ok_srt.mp4',
+#                                           scale=0.5)
+
+# msk = draw_comparison(gt_metadata, ver_metadata)
+
+# plot_comparison(gt_metadata, ver_metadata)
+
+
+# #%%
+# # calculates the irrigation map, mean and std deviation.        
+
+
+# gt_metadata = get_metadata(path = '/home/sergio/water-detection/videos/base_flip/GT.mp4')
+
+
+
+
+# # ver_metadata = get_metadata(path = '/home/sergio/water-detection/videos/base_flip/irr_ok_srt.mp4')
+# ver_metadata = debug_get_metadata_rescale(path = '/home/sergio/water-detection/videos/base_flip/VER.mp4',
+#                                           scale=0.5)
+
+# msk = draw_comparison(gt_metadata, ver_metadata)
+
+# plot_comparison(gt_metadata, ver_metadata)
+
+
+#%%
+import sys
+from water_detection import detect_water
+
+if __name__ == '__main__':
     
-    with open('comparison_ngsi.json', 'r') as fp:
-        json.dump(comparison_ngsi, fp)
+    
+    ROOT_DIR = os.getcwd()
 
+    GT_VIDEO_NAME = sys.argv[1]
+    VER_VIDEO_NAME = sys.argv[2]
+    
+    GT_DIR = os.path.join(ROOT_DIR, "videos/base_flip", GT_VIDEO_NAME)
+    VER_DIR = os.path.join(ROOT_DIR, "videos/base_flip", VER_VIDEO_NAME)
+    
+    
+    print(GT_DIR)
+    print(VER_DIR)
+    print(type(VER_DIR))
+    
+    # detect_water(VER_VIDEO_NAME, 100, skip_n_frames=1)
+    
+    
+    
+    gt_metadata = get_metadata(GT_DIR)
+    ver_metadata = debug_get_metadata_rescale(VER_DIR, scale=0.5)
+    
+    plot_comparison(gt_metadata, ver_metadata)
+    
+    save_comparison_json(gt_metadata, ver_metadata)
+    
+    
+    
 
-
-#%%
-# calculates the irrigation map, mean and std deviation.        
-
-
-gt_metadata = get_metadata(path = '/home/sergio/water-detection/videos/base_flip/irr_ok_srt.mp4')
-
-
-
-
-# ver_metadata = get_metadata(path = '/home/sergio/water-detection/videos/base_flip/irr_ok_srt.mp4')
-ver_metadata = debug_get_metadata_rescale(path = '/home/sergio/water-detection/videos/base_flip/irr_ok_srt.mp4',
-                                          scale=0.5)
-
-msk = draw_comparison(gt_metadata, ver_metadata)
-
-draw_comparison_side_by_side(gt_metadata, ver_metadata)
-
-
-#%%
-
-
-thresh = msk*255
-
-
-cnts = cv2.findContours(thresh, cv2.RETR_FLOODFILL, cv2.CHAIN_APPROX_SIMPLE)
-
-cnts = cnts[0] if len(cnts) == 2 else cnts[1]
-c = max(cnts, key=cv2.contourArea)
-
-# Obtain outer coordinates
-left = tuple(c[c[:, :, 0].argmin()][0])
-right = tuple(c[c[:, :, 0].argmax()][0])
-top = tuple(c[c[:, :, 1].argmin()][0])
-bottom = tuple(c[c[:, :, 1].argmax()][0])
-
-
-print(bottom, top, left, right)
-margin=0.1
-y_margin = np.int((bottom[1] - top[1])*margin)
-x_margin = np.int((right[0] - left[0])*margin)
-print(x_margin, y_margin)
-
-crop_img = msk[top[1]-y_margin:bottom[1]+y_margin, left[0]-x_margin:right[0]+x_margin]
-plt.imshow(crop_img)
-
-
+'/home/sergio/water-detection/videos/base_flip/GT.mp4'
+'/home/sergio/water-detection/videos/base_flip/irr_ok_srt.mp4'
 

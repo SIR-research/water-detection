@@ -128,21 +128,23 @@ def make_video(outvid, images=None, fps=30, size=None,
 
 
 
-if __name__ == '__main__':
-    """
-        test everything
-    """
+# if __name__ == '__main__':
+#     """
+#         test everything
+#     """
  
-    video_name = sys.argv[1]
-    epoch = sys.argv[2]
+#     video_name = sys.argv[1]
+#     epoch = sys.argv[2]
+
+def detect_water(video_name, epoch, skip_n_frames=1):
 
     # We use a K80 GPU with 24GB memory, which can fit 3 images.
     batch_size = 1
 
-    
+    print(epoch, type(epoch))
     VIDEO_DIR = os.path.join(ROOT_DIR, "videos")
     VIDEO_SAVE_DIR = os.path.join(VIDEO_DIR, "base_flip", video_name)
-    COCO_MODEL_PATH = os.path.join(ROOT_DIR, "logs/water20200916T_flip_train/mask_rcnn_water_0"+epoch+".h5")
+    COCO_MODEL_PATH = os.path.join(ROOT_DIR, "logs/water20200916T_flip_train/mask_rcnn_water_0"+str(epoch)+".h5")
     #if not os.path.exists(COCO_MODEL_PATH):
     #    utils.download_trained_weights(COCO_MODEL_PATH)
 
@@ -177,7 +179,6 @@ if __name__ == '__main__':
             break
         
         # Save each frame of the video to a list
-        skip_n_frames = 30
         frame_count += 1
         if frame_count % skip_n_frames == 0:
           
@@ -211,7 +212,7 @@ if __name__ == '__main__':
                   frames = []
 
     capture.release()
-    make_video("out"+video_name,frames)
+    # make_video("out"+video_name,frames)
     
     
     

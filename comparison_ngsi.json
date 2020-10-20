@@ -1,0 +1,26 @@
+{
+    "id": "comparison_1",
+    "type": "irrigation_comparison",
+    "ground_truth": {
+        "type": "StruturedValue",
+        "value": {
+            "mean": 12095.0,
+            "std": 333
+        }
+    },
+    "verification": {
+        "type": "StruturedValue",
+        "value": {
+            "mean": 333,
+            "std": 333
+        }
+    },
+    "irr_bar_img": {
+        "value": "url...",
+        "type": "url"
+    },
+    "irr_comparison_img": {
+        "value": "url...",
+        "type": "url"
+    }
+}
