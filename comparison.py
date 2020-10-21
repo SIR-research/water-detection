@@ -66,8 +66,8 @@ def get_metadata(path):
                 'irrmap': irrmap,
                 'areas': areas,
                 'mean': np.mean(areas),
-                'std': np.std(areas)
-                }
+                'std': np.std(areas),
+                'video_url': path}
 
     return metadata
 
@@ -183,7 +183,8 @@ def debug_get_metadata_rescale(path, scale=0.5):
                 'irrmap': irrmap,
                 'areas': areas,
                 'mean': np.mean(areas),
-                'std': np.std(areas)
+                'std': np.std(areas),
+                'video_url': path
                 }
 
     return metadata
@@ -193,9 +194,12 @@ def debug_get_metadata_rescale(path, scale=0.5):
     
 #%%
 
-def draw_bars_comparison(gtmd, vermd, second_color):
+def draw_bars_comparison(gtmd, vermd, second_color, comparison_path):
 
     plt.figure(200)
+    plt.tight_layout()
+    
+    
     height = [gtmd['mean'], vermd['mean']]
     bars = ('GR', 'Verification')
     y_pos = np.arange(len(bars))
@@ -206,7 +210,12 @@ def draw_bars_comparison(gtmd, vermd, second_color):
     
     plt.bar(y_pos, height, yerr=error, color=color, align='center', alpha=0.5, ecolor='black', capsize=10)
     plt.xticks(y_pos, bars)
-    plt.savefig('bars_plot_comparison.png', format='png')
+    plt.ylabel('Irrigation Area (pixels)')
+    plt.title('Irrigation Average Coverage Area')
+
+
+    plt.savefig(comparison_path+'/bars_plot_comparison.png', format='png', transparent=False)
+    
     # plt.show()
 
 
@@ -223,103 +232,101 @@ def apply_mask(image, mask, color, alpha=0.5):
 
 
 
-def draw_comparison(gtmd, vermd):
+# def draw_comparison(gtmd, vermd):
 
     
-    # normalize vector
-    gtimg = gtmd['irrmap']   
+#     # normalize vector
+#     gtimg = gtmd['irrmap']   
     
-    # img = np.round(img*255/np.max(img)) #from 0 to 255
-    gtimg = gtimg/np.max(gtimg) #from 0 to 1
-    
-    
-    
-    # join matricess Blue for the gtmd and Red for the vermd
-    image = np.ones(gtimg.shape+(3,)) #creates new image array of dimention [x,y,3]
+#     # img = np.round(img*255/np.max(img)) #from 0 to 255
+#     gtimg = gtimg/np.max(gtimg) #from 0 to 1
     
     
-    verimg = vermd['irrmap']
-    verimg = verimg/np.max(verimg)
+    
+#     # join matricess Blue for the gtmd and Red for the vermd
+#     image = np.ones(gtimg.shape+(3,)) #creates new image array of dimention [x,y,3]
+    
+    
+#     verimg = vermd['irrmap']
+#     verimg = verimg/np.max(verimg)
     
 
    
     
-    image = apply_mask(image,gtimg,(0,0,1), alpha=0.5)
+#     image = apply_mask(image,gtimg,(0,0,1), alpha=0.5)
     
-    if vermd['mean'] < (gtmd['mean']-gtmd['std']) or vermd['mean'] > (gtmd['mean']+gtmd['std']):
+#     if vermd['mean'] < (gtmd['mean']-gtmd['std']) or vermd['mean'] > (gtmd['mean']+gtmd['std']):
        
-       image = apply_mask(image,verimg,(1,0,0), alpha=0.5)
+#        image = apply_mask(image,verimg,(1,0,0), alpha=0.5)
     
        
-       draw_bars_comparison(gtmd, vermd, 'red')
+#        draw_bars_comparison(gtmd, vermd, 'red')
     
-    else:
-        image = apply_mask(image,verimg,(0,1,0), alpha=0.5)
-        draw_bars_comparison(gtmd, vermd, 'green')
-    
-    
+#     else:
+#         image = apply_mask(image,verimg,(0,1,0), alpha=0.5)
+#         draw_bars_comparison(gtmd, vermd, 'green')
     
     
+      
+    
+#     imgmsk = np.logical_or(gtimg>0, verimg>0)
+    
+#     ### crop image
+#     thresh = imgmsk*255
+    
+#     cnts = cv2.findContours(thresh, cv2.RETR_FLOODFILL, cv2.CHAIN_APPROX_SIMPLE)
+    
+#     cnts = cnts[0] if len(cnts) == 2 else cnts[1]
+#     c = max(cnts, key=cv2.contourArea)
+    
+#     # Obtain outer coordinates
+#     left = tuple(c[c[:, :, 0].argmin()][0])
+#     right = tuple(c[c[:, :, 0].argmax()][0])
+#     top = tuple(c[c[:, :, 1].argmin()][0])
+#     bottom = tuple(c[c[:, :, 1].argmax()][0])
     
     
-    imgmsk = np.logical_or(gtimg>0, verimg>0)
+#     print(bottom, top, left, right)
+#     margin=0.1
+#     y_margin = np.int((bottom[1] - top[1])*margin)
+#     x_margin = np.int((right[0] - left[0])*margin)
+#     print(x_margin, y_margin)
     
-    ### crop image
-    thresh = imgmsk*255
-    
-    cnts = cv2.findContours(thresh, cv2.RETR_FLOODFILL, cv2.CHAIN_APPROX_SIMPLE)
-    
-    cnts = cnts[0] if len(cnts) == 2 else cnts[1]
-    c = max(cnts, key=cv2.contourArea)
-    
-    # Obtain outer coordinates
-    left = tuple(c[c[:, :, 0].argmin()][0])
-    right = tuple(c[c[:, :, 0].argmax()][0])
-    top = tuple(c[c[:, :, 1].argmin()][0])
-    bottom = tuple(c[c[:, :, 1].argmax()][0])
+#     image = image[top[1]-y_margin:bottom[1]+y_margin, left[0]-x_margin:right[0]+x_margin]
     
     
-    print(bottom, top, left, right)
-    margin=0.1
-    y_margin = np.int((bottom[1] - top[1])*margin)
-    x_margin = np.int((right[0] - left[0])*margin)
-    print(x_margin, y_margin)
-    
-    image = image[top[1]-y_margin:bottom[1]+y_margin, left[0]-x_margin:right[0]+x_margin]
-    
-    
-    ## display image
+#     ## display image
     
     
     
     
-    print(np.unique(gtimg))
-    print(np.unique(image))
+#     print(np.unique(gtimg))
+#     print(np.unique(image))
     
-    # image = 1-image    
+#     # image = 1-image    
     
-    #display images
+#     #display images
 
     
 
-    plt.figure(300)
-    # imgplot = plt.imshow(gtimg, cmap='Blues', alpha=1, origin='lower')
-    # imgplot = plt.imshow(verimg, cmap='Reds', alpha=0.5, origin='lower')
-    plt.imshow(image)
+#     plt.figure(300)
+#     # imgplot = plt.imshow(gtimg, cmap='Blues', alpha=1, origin='lower')
+#     # imgplot = plt.imshow(verimg, cmap='Reds', alpha=0.5, origin='lower')
+#     plt.imshow(image)
 
 
-    # plt.show()
+#     # plt.show()
 
-    return imgmsk
+#     return imgmsk
 
 
 
 #%%
-
-
-def plot_comparison(gtmd, vermd):
-
     
+
+def plot_comparison(gtmd, vermd, comparison_path):
+
+        
     # normalize vector
     gtimg = gtmd['irrmap']   
     
@@ -333,12 +340,9 @@ def plot_comparison(gtmd, vermd):
     
     # join matricess Blue for the gtmd and Red for the vermd
     image = np.ones(gtimg.shape+(3,)) #creates new image array of dimention [x,y,3]
-    imagegt = np.ones(gtimg.shape+(3,)) #creates new image array of dimention [x,y,3]
-    imagever = np.ones(gtimg.shape+(3,)) #creates new image array of dimention [x,y,3]
+    imagegt = np.ones(gtimg.shape+(3,)) 
+    imagever = np.ones(gtimg.shape+(3,)) 
     
-    
-
-   
     
     imagegt = apply_mask(imagegt,gtimg,(0,0,1), alpha=0.5)
     image = apply_mask(image,gtimg,(0,0,1), alpha=0.5)
@@ -348,17 +352,13 @@ def plot_comparison(gtmd, vermd):
        image = apply_mask(image,verimg,(1,0,0), alpha=0.5)
        imagever = apply_mask(imagever,verimg,(1,0,0), alpha=0.5)
     
-       draw_bars_comparison(gtmd, vermd, 'red')
+       draw_bars_comparison(gtmd, vermd, 'red', comparison_path)
     
     else:
         image = apply_mask(image,verimg,(0,1,0), alpha=0.5)
         imagever = apply_mask(imagever,verimg,(0,1,0), alpha=0.5)
                 
-        draw_bars_comparison(gtmd, vermd, 'green')
-    
-    
-    
-    
+        draw_bars_comparison(gtmd, vermd, 'green', comparison_path)
     
     
     imgmsk = np.logical_or(gtimg>0, verimg>0)
@@ -378,11 +378,9 @@ def plot_comparison(gtmd, vermd):
     bottom = tuple(c[c[:, :, 1].argmax()][0])
     
     
-    print(bottom, top, left, right)
     margin=0.1
     y_margin = np.int((bottom[1] - top[1])*margin)
     x_margin = np.int((right[0] - left[0])*margin)
-    print(x_margin, y_margin)
     
     image = image[top[1]-y_margin:bottom[1]+y_margin, left[0]-x_margin:right[0]+x_margin]
 
@@ -393,23 +391,26 @@ def plot_comparison(gtmd, vermd):
     #display images
 
     fig, (ax1, ax2, ax3) = plt.subplots(1,3)
+    
 
+    fig.tight_layout()
+    
     for ax in fig.axes:
-        ax.set_xticks([], [])
-        ax.set_yticks([],[])
+        ax.set_xticks([])
+        ax.set_yticks([])
         
     ax1.set_xlabel('Groud Truth')        
     ax2.set_xlabel('Verification')        
     ax3.set_xlabel('Overlay')        
     
-    # imgplot = plt.imshow(gtimg, cmap='Blues', alpha=1, origin='lower')
-    # imgplot = plt.imshow(verimg, cmap='Reds', alpha=0.5, origin='lower')
+    plt.suptitle('Irrigation Area Comparison', x=0.5, y=0.85)
     
     ax1.imshow(imagegt)
     ax2.imshow(imagever)
     ax3.imshow(image)
     
-    plt.savefig('irrigation_comparison.png', format='png')
+    
+    plt.savefig(comparison_path+'/irrigation_comparison.png', format='png', transparent=False)
 
     # plt.show()
 
@@ -421,7 +422,37 @@ import json
 
 def create_comparison_entity_json(gtmd, vermd):
     
- 
+
+
+    comparison_ngsi = {
+        "id": "comparison_1",
+        "type": "irrigation_comparison",
+        "ground_truth": {
+            "type": "StruturedValue",
+            "value": { 
+                "mean": gtmd['mean'],
+                "std": gtmd['std']
+                }
+        },
+        "verification": {
+            "type": "StruturedValue",
+            "value": {
+                "mean": vermd['mean'],
+                "std": vermd['std']
+                }
+        },
+        "irr_bar_img": {
+            "value": "url...",
+            "type": "url"
+        },
+        "irr_comparison_img": {
+            "value": "url...",
+            "type": "url"
+        }
+    }
+
+    return comparison_ngsi
+    
     # not structured data
     # comparison_ngsi = {
         
@@ -454,44 +485,12 @@ def create_comparison_entity_json(gtmd, vermd):
     #         "type": "url"
     #     }
     # }
-    
-    
-    
-    comparison_ngsi = {
-        
-        "id": "comparison_1",
-        "type": "irrigation_comparison",
-        "ground_truth": {
-            "type": "StruturedValue",
-            "value": { 
-                "mean": gtmd['mean'],
-                "std": 333
-                }
-        },
-        "verification": {
-            "type": "StruturedValue",
-            "value": {
-                "mean": 333,
-                "std": 333
-                }
-        },
-        "irr_bar_img": {
-            "value": "url...",
-            "type": "url"
-        },
-        "irr_comparison_img": {
-            "value": "url...",
-            "type": "url"
-        }
-    }
-        
-    return comparison_ngsi
 
-def save_comparison_json(gtmd, vermd):
+def save_comparison_json(gtmd, vermd, comparison_path):
     
     comparison_ngsi = create_comparison_entity_json(gtmd, vermd)
         
-    with open('comparison_ngsi.json', 'w') as fp:
+    with open(comparison_path + '/comparison_ngsi.json', 'w') as fp:
         json.dump(comparison_ngsi, fp, indent=4)
 
 
@@ -526,15 +525,17 @@ def save_comparison_json(gtmd, vermd):
 # # ver_metadata = get_metadata(path = '/home/sergio/water-detection/videos/base_flip/irr_ok_srt.mp4')
 # ver_metadata = debug_get_metadata_rescale(path = '/home/sergio/water-detection/videos/base_flip/VER.mp4',
 #                                           scale=0.5)
-
-# msk = draw_comparison(gt_metadata, ver_metadata)
+# # 
+# # msk = draw_comparison(gt_metadata, ver_metadata)
 
 # plot_comparison(gt_metadata, ver_metadata)
 
 
 #%%
 import sys
+
 from water_detection import detect_water
+
 
 if __name__ == '__main__':
     
@@ -546,6 +547,15 @@ if __name__ == '__main__':
     
     GT_DIR = os.path.join(ROOT_DIR, "videos/base_flip", GT_VIDEO_NAME)
     VER_DIR = os.path.join(ROOT_DIR, "videos/base_flip", VER_VIDEO_NAME)
+    
+    COMPARISON_PATH = ROOT_DIR + '/comparison/' + GT_VIDEO_NAME + '_comp_' + VER_VIDEO_NAME
+    
+    print(COMPARISON_PATH)
+    if not os.path.exists(COMPARISON_PATH):
+        os.makedirs(COMPARISON_PATH)
+        print('criou')
+    
+    
     
     
     print(GT_DIR)
@@ -559,13 +569,10 @@ if __name__ == '__main__':
     gt_metadata = get_metadata(GT_DIR)
     ver_metadata = debug_get_metadata_rescale(VER_DIR, scale=0.5)
     
-    plot_comparison(gt_metadata, ver_metadata)
+    plot_comparison(gt_metadata, ver_metadata, COMPARISON_PATH)
     
-    save_comparison_json(gt_metadata, ver_metadata)
+    save_comparison_json(gt_metadata, ver_metadata, COMPARISON_PATH)
     
     
     
-
-'/home/sergio/water-detection/videos/base_flip/GT.mp4'
-'/home/sergio/water-detection/videos/base_flip/irr_ok_srt.mp4'
 
