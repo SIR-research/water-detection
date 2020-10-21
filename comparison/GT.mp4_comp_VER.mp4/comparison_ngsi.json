@@ -5,22 +5,28 @@
         "type": "StruturedValue",
         "value": {
             "mean": 12095.0,
-            "std": 6466.78865434769
+            "std": 6466.78865434769,
+            "video_url": "/home/sergio/water-detection/videos/base_flip/GT.mp4"
         }
     },
     "verification": {
         "type": "StruturedValue",
         "value": {
-            "mean": 333,
-            "std": 333
+            "mean": 3094.75,
+            "std": 1635.3683644671619,
+            "video_url": "/home/sergio/water-detection/videos/base_flip/VER.mp4"
         }
     },
-    "irr_bar_img": {
-        "value": "url...",
+    "comparison_result": {
+        "value": "NOK",
+        "type": "Text"
+    },
+    "bar_plot": {
+        "value": "/home/sergio/water-detection/comparison/GT.mp4_comp_VER.mp4/bar_plot.png",
         "type": "url"
     },
-    "irr_comparison_img": {
-        "value": "url...",
+    "area_plot": {
+        "value": "/home/sergio/water-detection/comparison/GT.mp4_comp_VER.mp4/area_plot.png",
         "type": "url"
     }
 }
