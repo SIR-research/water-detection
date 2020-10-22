@@ -602,14 +602,29 @@ def get_comparison_result(gtmd, vermd):
 
 #%%
 
+import requests
+
+def create_orion_entity(entity):
+    
+    url_entities = 'http://localhost:1026/v2/entities'
+    url_subscription = 'http://localhost:1026/v2/subscriptions'
+    headers = {'content-type': 'application/json'}
+
+    r = requests.post(url_entities, data=json.dumps(entity), headers=headers)
+    
+    print(r.text)
+
+
+#%%
+
 
 ROOT_DIR = os.getcwd()
 
 GT_VIDEO_NAME = 'GT.mp4'
 VER_VIDEO_NAME = 'VER.mp4'
 
-GT_DIR = os.path.join(ROOT_DIR, "videos/base_flip", GT_VIDEO_NAME)
-VER_DIR = os.path.join(ROOT_DIR, "videos/base_flip", VER_VIDEO_NAME)
+GT_DIR = os.path.join(ROOT_DIR, "water-detection/videos/base_flip", GT_VIDEO_NAME)
+VER_DIR = os.path.join(ROOT_DIR, "water-detection/videos/base_flip", VER_VIDEO_NAME)
 
 COMPARISON_PATH = ROOT_DIR + '/comparison/' + GT_VIDEO_NAME + '_comp_' + VER_VIDEO_NAME
 
@@ -652,6 +667,8 @@ comparison_entity['area_plot'] = create_area_plot(gt_metadata, ver_metadata, com
 
 save_comparison_json(comparison_entity, COMPARISON_PATH)
 
+create_orion_entity(comparison_entity)
+
 #%%
 import sys
 
@@ -678,7 +695,7 @@ if __name__ == '__main__':
     
     
     
-    
+
     print(GT_DIR)
     print(VER_DIR)
     print(type(VER_DIR))
@@ -689,18 +706,26 @@ if __name__ == '__main__':
     gt_metadata = get_metadata(GT_DIR)
     ver_metadata = debug_get_metadata_rescale(VER_DIR, scale=0.5)
     
-    comparison_entity = create_comparison_entity_json(gt_metadata, ver_metadata,
-                                                      COMPARISON_PATH)
+    comparison_entity = create_comparison_entity_json(gt_metadata, ver_metadata)
     
     comparison_entity['comparison_result'] = get_comparison_result(gt_metadata, ver_metadata)
     
     
+            # "bar_plot": {
+            #     "value": comparison_path + '/bar_plot.png',
+            #     "type": "url"
+            # },
+            # "area_plot": {
+            #     "value": comparison_path + '/area_plot.png',
+            #     "type": "url"
+            # }
+    
+    comparison_entity['bar_plot'] = create_bar_plot(gt_metadata, ver_metadata, comparison_entity, COMPARISON_PATH)
+    
+    comparison_entity['area_plot'] = create_area_plot(gt_metadata, ver_metadata, comparison_entity, COMPARISON_PATH)
     
     
-    plot_comparison(gt_metadata, ver_metadata, COMPARISON_PATH)
-    
-    save_comparison_json(gt_metadata, ver_metadata, COMPARISON_PATH)
-    
-    
-    
+    save_comparison_json(comparison_entity, COMPARISON_PATH)
+        
+        
 
