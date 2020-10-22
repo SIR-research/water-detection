@@ -607,6 +607,9 @@ import requests
 def create_orion_entity(entity):
     
     url_entities = 'http://localhost:1026/v2/entities'
+    url_entities = 'http://177.104.61.52:1026/v2/entities' #swamp test url
+    # url_entities = 'http://177.104.61.47:1026/v2/entities' #swamp url
+    
     url_subscription = 'http://localhost:1026/v2/subscriptions'
     headers = {'content-type': 'application/json'}
 
