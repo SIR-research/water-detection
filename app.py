@@ -16,6 +16,7 @@ Created on Wed Oct 28 17:23:41 2020
 
 from flask import Flask, request, redirect, url_for, flash, jsonify
 
+import os
 
 app = Flask(__name__)
 
@@ -51,9 +52,11 @@ def makecalc():
 @app.route('/compare', methods=['POST'])
 def compare():
     data = request.get_json()
-    # prediction = np.array2string(model.predict(data))
-
-    return jsonify(data)
+    print(data[0], data[1])
+    
+    os.system("python comparison_v1.py " + data[0] + " " + data[1])  
+    
+    return 'Files Compared', 200
 
 
     

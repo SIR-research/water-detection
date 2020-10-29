@@ -552,7 +552,7 @@ def create_comparison_entity_json(gtmd, vermd):
 
 
     comparison_ngsi = {
-        "id": "comparison_1",
+        "id": "comparison_3",
         "type": "irrigation_comparison",
         "ground_truth": {
             "type": "StruturedValue",
@@ -606,9 +606,9 @@ import requests
 
 def create_orion_entity(entity):
     
-    url_entities = 'http://localhost:1026/v2/entities'
-    url_entities = 'http://177.104.61.52:1026/v2/entities' #swamp test url
-    # url_entities = 'http://177.104.61.47:1026/v2/entities' #swamp url
+    # url_entities = 'http://localhost:1026/v2/entities'
+#    url_entities = 'http://177.104.61.52:1026/v2/entities' #SWAMP PRODUCTION IP!!!
+    url_entities = 'http://177.104.61.47:1026/v2/entities' #swamp test url
     
     url_subscription = 'http://localhost:1026/v2/subscriptions'
     headers = {'content-type': 'application/json'}
@@ -618,64 +618,69 @@ def create_orion_entity(entity):
     print(r.text)
 
 
+## ver entidades no navegador
+# http://177.104.61.47:1026/v2/entities/
+# http://177.104.61.47:1026/v2/entities/comparison_1
+# http://177.104.61.47:1026/v2/entities/?type=irrigation_comparison
+
 #%%
 
 
-ROOT_DIR = os.getcwd()
+# ROOT_DIR = os.getcwd()
 
-GT_VIDEO_NAME = 'GT.mp4'
-VER_VIDEO_NAME = 'VER.mp4'
+# GT_VIDEO_NAME = 'GT.mp4'
+# VER_VIDEO_NAME = 'VER.mp4'
 
-GT_DIR = os.path.join(ROOT_DIR, "water-detection/videos/base_flip", GT_VIDEO_NAME)
-VER_DIR = os.path.join(ROOT_DIR, "water-detection/videos/base_flip", VER_VIDEO_NAME)
+# GT_DIR = os.path.join(ROOT_DIR, "water-detection/videos/base_flip", GT_VIDEO_NAME)
+# VER_DIR = os.path.join(ROOT_DIR, "water-detection/videos/base_flip", VER_VIDEO_NAME)
 
-COMPARISON_PATH = ROOT_DIR + '/comparison/' + GT_VIDEO_NAME + '_comp_' + VER_VIDEO_NAME
+# COMPARISON_PATH = ROOT_DIR + '/comparison/' + GT_VIDEO_NAME + '_comp_' + VER_VIDEO_NAME
 
-print(COMPARISON_PATH)
-if not os.path.exists(COMPARISON_PATH):
-    os.makedirs(COMPARISON_PATH)
-    print('criou')
-
-
+# print(COMPARISON_PATH)
+# if not os.path.exists(COMPARISON_PATH):
+#     os.makedirs(COMPARISON_PATH)
+#     print('criou')
 
 
-print(GT_DIR)
-print(VER_DIR)
-print(type(VER_DIR))
-
-# detect_water(VER_VIDEO_NAME, 100, skip_n_frames=1)
 
 
-gt_metadata = get_metadata(GT_DIR)
-ver_metadata = debug_get_metadata_rescale(VER_DIR, scale=0.5)
+# print(GT_DIR)
+# print(VER_DIR)
+# print(type(VER_DIR))
 
-comparison_entity = create_comparison_entity_json(gt_metadata, ver_metadata)
-
-comparison_entity['comparison_result'] = get_comparison_result(gt_metadata, ver_metadata)
-
-
-        # "bar_plot": {
-        #     "value": comparison_path + '/bar_plot.png',
-        #     "type": "url"
-        # },
-        # "area_plot": {
-        #     "value": comparison_path + '/area_plot.png',
-        #     "type": "url"
-        # }
-
-comparison_entity['bar_plot'] = create_bar_plot(gt_metadata, ver_metadata, comparison_entity, COMPARISON_PATH)
-
-comparison_entity['area_plot'] = create_area_plot(gt_metadata, ver_metadata, comparison_entity, COMPARISON_PATH)
+# # detect_water(VER_VIDEO_NAME, 100, skip_n_frames=1)
 
 
-save_comparison_json(comparison_entity, COMPARISON_PATH)
+# gt_metadata = get_metadata(GT_DIR)
+# ver_metadata = debug_get_metadata_rescale(VER_DIR, scale=0.5)
 
-create_orion_entity(comparison_entity)
+# comparison_entity = create_comparison_entity_json(gt_metadata, ver_metadata)
+
+# comparison_entity['comparison_result'] = get_comparison_result(gt_metadata, ver_metadata)
+
+
+#         # "bar_plot": {
+#         #     "value": comparison_path + '/bar_plot.png',
+#         #     "type": "url"
+#         # },
+#         # "area_plot": {
+#         #     "value": comparison_path + '/area_plot.png',
+#         #     "type": "url"
+#         # }
+
+# comparison_entity['bar_plot'] = create_bar_plot(gt_metadata, ver_metadata, comparison_entity, COMPARISON_PATH)
+
+# comparison_entity['area_plot'] = create_area_plot(gt_metadata, ver_metadata, comparison_entity, COMPARISON_PATH)
+
+
+# save_comparison_json(comparison_entity, COMPARISON_PATH)
+
+# create_orion_entity(comparison_entity)
 
 #%%
 import sys
 
-from water_detection import detect_water
+# from water_detection import detect_water
 
 
 if __name__ == '__main__':
@@ -691,6 +696,7 @@ if __name__ == '__main__':
     
     COMPARISON_PATH = ROOT_DIR + '/comparison/' + GT_VIDEO_NAME + '_comp_' + VER_VIDEO_NAME
     
+    
     print(COMPARISON_PATH)
     if not os.path.exists(COMPARISON_PATH):
         os.makedirs(COMPARISON_PATH)
@@ -698,7 +704,7 @@ if __name__ == '__main__':
     
     
     
-
+    
     print(GT_DIR)
     print(VER_DIR)
     print(type(VER_DIR))
@@ -729,6 +735,5 @@ if __name__ == '__main__':
     
     
     save_comparison_json(comparison_entity, COMPARISON_PATH)
-        
-        
 
+    create_orion_entity(comparison_entity)

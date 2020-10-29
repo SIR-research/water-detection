@@ -11,7 +11,7 @@ import json
 
 url = 'http://192.168.15.12:5000/compare'
 
-data = ['str1', 'str2']
+data = ['GT.mp4', 'VER.mp4']
 j_data = json.dumps(data)
 headers = {'content-type': 'application/json', 'Accept-Charset': 'UTF-8'}
 r = requests.post(url, data=j_data, headers=headers)

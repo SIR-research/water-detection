@@ -1,5 +1,5 @@
 {
-    "id": "comparison_3",
+    "id": "comparison_1",
     "type": "irrigation_comparison",
     "ground_truth": {
         "type": "StruturedValue",
