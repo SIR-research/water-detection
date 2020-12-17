@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+    # -*- coding: utf-8 -*-
 """
 Python code for testing the video on Mask R-CNN proposed by Girshick et al
 and implimented by Matterport in Tensorflow and Keras.
@@ -16,8 +16,7 @@ import tensorflow as tf
 import cv2
 import json_tricks as jsontrk
 
-ROOT_DIR = os.getcwd()
-
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 sys.path.append(ROOT_DIR)  # Specifies the path for looking the following packages
@@ -213,6 +212,5 @@ def detect_water(video_name, epoch, skip_n_frames=1):
 
     capture.release()
     # make_video("out"+video_name,frames)
-    
-    
-    
+
+

@@ -6,6 +6,7 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 import cv2
+import sys
 
 #%%
 
@@ -547,12 +548,12 @@ def create_area_plot(gtmd, vermd, comp, comparison_path):
 #%%
 import json
 
-def create_comparison_entity_json(gtmd, vermd):
+def create_comparison_entity_json(gtmd, vermd, id="comparison"):
     
 
 
     comparison_ngsi = {
-        "id": "comparison_3",
+        "id": id,
         "type": "irrigation_comparison",
         "ground_truth": {
             "type": "StruturedValue",
@@ -618,6 +619,57 @@ def create_orion_entity(entity):
     print(r.text)
 
 
+def compare(GT_VIDEO_NAME, VER_VIDEO_NAME, save_entity=False):
+
+    # ROOT_DIR = os.getcwd()
+    ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+   
+    GT_DIR = os.path.join(ROOT_DIR, "videos/base_flip", GT_VIDEO_NAME)
+    VER_DIR = os.path.join(ROOT_DIR, "videos/base_flip", VER_VIDEO_NAME)
+    
+    
+    # gt_video_name_no_ext = os.path.splitext(GT_VIDEO_NAME)[0]
+    # ver_video_name_no_ext = os.path.splitext(VER_VIDEO_NAME)[0]
+
+    comparison_name = GT_VIDEO_NAME + '_comp_' + VER_VIDEO_NAME
+
+    COMPARISON_PATH = ROOT_DIR + '/comparison/' + comparison_name
+
+    print(COMPARISON_PATH)
+    if not os.path.exists(COMPARISON_PATH):
+        os.makedirs(COMPARISON_PATH)
+        print('criou')
+    
+
+    gt_metadata = get_metadata(GT_DIR)
+    ver_metadata = get_metadata(VER_DIR)
+    # ver_metadata = debug_get_metadata_rescale(VER_DIR, scale=0.5)
+    
+    comparison_entity = create_comparison_entity_json(gt_metadata, ver_metadata, id=comparison_name)
+    
+    comparison_entity['comparison_result'] = get_comparison_result(gt_metadata, ver_metadata)
+    
+    
+            # "bar_plot": {
+            #     "value": comparison_path + '/bar_plot.png',
+            #     "type": "url"
+            # },
+            # "area_plot": {
+            #     "value": comparison_path + '/area_plot.png',
+            #     "type": "url"
+            # }
+    
+    comparison_entity['bar_plot'] = create_bar_plot(gt_metadata, ver_metadata, comparison_entity, COMPARISON_PATH)
+    
+    comparison_entity['area_plot'] = create_area_plot(gt_metadata, ver_metadata, comparison_entity, COMPARISON_PATH)
+    
+    
+    save_comparison_json(comparison_entity, COMPARISON_PATH)
+
+    if save_entity:
+        create_orion_entity(comparison_entity)
+
 ## ver entidades no navegador
 # http://177.104.61.47:1026/v2/entities/
 # http://177.104.61.47:1026/v2/entities/comparison_1
@@ -678,7 +730,6 @@ def create_orion_entity(entity):
 # create_orion_entity(comparison_entity)
 
 #%%
-import sys
 
 # from water_detection import detect_water
 
