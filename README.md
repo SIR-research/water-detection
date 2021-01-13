@@ -9,7 +9,7 @@ A machine learning-based algorithm detects the water spray using a Mask Regional
 
 Switch to the service branch.
 ```bash
-conda env create -f env/water_serv.yml
+git checkout service
 ```
 
 Create the Conda Virtual Environment using the file water_serv.yml located in the env/ directory. (linux-64 platforms)
