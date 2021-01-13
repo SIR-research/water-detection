@@ -1,29 +1,27 @@
-# Project Name
+# Water Detection Service
 
-Description of the project.
+This service aims to detect malfunctioning irrigation systems using footage acquired by a drone.
+A machine learning-based algorithm detects the water spray using a Mask Regional Convolutional Neural Network (MRCNN)¹. The service is available through a Streamlit web app.
+
+1 - C. K. G. Albuquerque, S. Polimante, A. Torre-Neto and R. C. Prati, "Water spray detection for smart irrigation systems with Mask R-CNN and UAV footage," 2020 IEEE International Workshop on Metrology for Agriculture and Forestry (MetroAgriFor), Trento, 2020, pp. 236-240, doi: 10.1109/MetroAgriFor50201.2020.9277542. [See full article](https://ieeexplore.ieee.org/abstract/document/9277542)
 
 ## Installation
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
+Switch to the service branch.
+```bash
+conda env create -f env/water_serv.yml
+```
+
+Create the Conda Virtual Environment using the file water_serv.yml located in the env/ directory. (linux-64 platforms)
 
 ```bash
-pip install foobar
+conda env create -f env/water_serv.yml
 ```
+
 
 ## Usage
 
-```python
-import foobar
-
-foobar.pluralize('word') # returns 'words'
-foobar.pluralize('goose') # returns 'geese'
-foobar.singularize('phenomena') # returns 'phenomenon'
+Start the Streamlit web app.
+```bash
+streamlit run streamlit_app/app.py
 ```
-
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update the tests as appropriate.
-
-## License
-[MIT](https://choosealicense.com/licenses/mit/)
