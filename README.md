@@ -25,3 +25,5 @@ Start the Streamlit web app.
 ```bash
 streamlit run streamlit_app/app.py
 ```
+
+The web app should launch as a new browser tab. If the web app is not launched, access it at the address specified on the terminal. The default address is http://localhost:8501.
