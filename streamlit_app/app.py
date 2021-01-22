@@ -350,7 +350,7 @@ elif option == 'Compare Irrigation':
 
 #        with st.spinner("""Detecting water on video frames...
 #            this can take a while."""):    
-#            time.sleep(3)
+#            time.sleep(3)https://github.com/SIR-research/water-detection
 #        st.success('Finished Detecting Water!')
 
         display_n_images(f_ver, 10)
