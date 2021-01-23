@@ -18,6 +18,11 @@ Create the Conda Virtual Environment using the file water_serv.yml located in th
 conda env create -f env/water_serv.yml
 ```
 
+Activate the new environment
+
+```bash
+conda activate water_serv
+```
 
 ## Usage
 
