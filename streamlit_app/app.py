@@ -109,8 +109,8 @@ def compare_videos(gt_name, ver_name):
 
         Comparison of areas containing water.
 
-        This plot displays the area of detected water on each frame on the Ground
-        Truth video (left), verification video (middle), and the overlapping
+        This plot displays the area of detected water on each frame on the Reference 
+        video (left), verification video (middle), and the overlapping
         area of both.
         
         """) 
@@ -122,7 +122,7 @@ def compare_videos(gt_name, ver_name):
         Mean and Standard Deviation of areas containing water.
 
         This bar plot displays the average number of pixels detected as water on
-        the Ground True video (left bar) and the verification video (right bar). The
+        the Reference video (left bar) and the verification video (right bar). The
         error bars are the standard deviation.
         
         """) 
@@ -210,16 +210,16 @@ st.markdown("""
     This service detects failures on irrigation systems based on
     video footage.
 
-    A video of the irrigation system working properly is called Ground True. 
+    A video of the irrigation system working properly is called Reference. 
     
     * Upload a video of the system working properly at the side bar
-     using the option **Register Ground Truth**.
+     using the option **Register Reference video**.
 
     Under and over irrigation can be detected by in future 
-    videos by comparing it to the Ground Truth video.
+    videos by comparing it to the Reference video.
 
     * Upload the irrigation system videos to compare it to the
-     Ground Truth using the option **Compare Irrigation** on the side bar.
+     Reference video using the option **Compare Irrigation** on the side bar.
 
     ------------------------------------------------
 
@@ -236,13 +236,13 @@ my_expander.markdown('''[Find the article](https://ieeexplore.ieee.org/document/
 option = st.sidebar.selectbox(
     'Select the Service',
      ['Compare Irrigation',
-     'Register Ground Truth'])
+     'Register Reference'])
 
 
-if option == 'Register Ground Truth':
+if option == 'Register Reference':
 
   st.markdown("""
-    # Ground Truth Registration
+    # Reference Video Registration
 
     Select a video of the irrigatio system working properly.
 
@@ -252,7 +252,7 @@ if option == 'Register Ground Truth':
 
 
 #  session_state = SessionState.get(gt=0)  # Pick some initial values.
-  f_gt = st.file_uploader("Upload Ground Truth video") 
+  f_gt = st.file_uploader("Upload Reference video") 
   
 
 
@@ -301,14 +301,14 @@ if option == 'Register Ground Truth':
         st.success('Video Saved.')
         
         #Detecting Water UNCOMMENT!
-        # with st.spinner('Detecting water on video frames...'):
-        #     wd.detect_water(f_gt.name, 100, skip_n_frames=240)
-        # st.success('Finished Detecting Water!')
-
-        with st.spinner("""Detecting water on video frames...
-            this can take a while."""):    
-            time.sleep(5)
+        with st.spinner('Detecting water on video frames...'):
+            wd.detect_water(f_gt.name, 100, skip_n_frames=60)
         st.success('Finished Detecting Water!')
+
+#        with st.spinner("""Detecting water on video frames...
+#            this can take a while."""):    
+#            time.sleep(3)
+#        st.success('Finished Detecting Water!')
 
         display_n_images(f_gt, 10)
 
@@ -319,7 +319,7 @@ elif option == 'Compare Irrigation':
     # Compare Irrigation
 
     Select a video of the irrigatio system to be compared to 
-    Ground Truth video.
+    Reference video.
 
     """)
 
@@ -343,15 +343,15 @@ elif option == 'Compare Irrigation':
             save_video(tfile, ROOT_PATH+'/videos/'+f_ver.name)
         st.success('Video Saved.')
 
-        # #Detecting Water UNCOMMENT!!
-        # with st.spinner('Detecting water on video frames...'):
-        #     wd.detect_water(f_ver.name, 100, skip_n_frames=3)
-        # st.success('Finished Detecting Water!')
-
-        with st.spinner("""Detecting water on video frames...
-            this can take a while."""):    
-            time.sleep(5)
+         #Detecting Water UNCOMMENT!!
+        with st.spinner('Detecting water on video frames...'):
+            wd.detect_water(f_ver.name, 100, skip_n_frames=60)
         st.success('Finished Detecting Water!')
+
+#        with st.spinner("""Detecting water on video frames...
+#            this can take a while."""):    
+#            time.sleep(3)https://github.com/SIR-research/water-detection
+#        st.success('Finished Detecting Water!')
 
         display_n_images(f_ver, 10)
 
